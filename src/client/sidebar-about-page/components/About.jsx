@@ -1,26 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { serverFunctions } from '../../utils/serverFunctions';
 
-const About = () => (
-  <div>
-    <p>
-      <b>☀️ React app inside a sidebar! ☀️</b>
-    </p>
-    <p>
-      This is a very simple page demonstrating how to build a React app inside a
-      sidebar.
-    </p>
-    <p>
-      Visit the Github repo for more information on how to use this project.
-    </p>
-    <p>- Elisha Nuchi</p>
-    <a
-      href="https://www.github.com/enuchi/React-Google-Apps-Script"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      React + Google Apps Script
-    </a>
-  </div>
-);
+const About = () => {
+  const [count, setCount] = useState(0);
+
+  const onSubmit = async () => {
+    console.log('hello1');
+    // var temp = serverFunctions.setActiveSheet("sales")
+    // var cell = await serverFunctions.getActiveSheetCell("A1");
+    // console.log(cell)
+    serverFunctions.setActiveSheetCell();
+    console.log('hello2');
+  };
+  const incCount = async () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <div>
+      <p>
+        <b>☀️ React app inside a sidebar! ☀️</b>
+      </p>
+      <p>
+        2st attempt
+        {count}
+      </p>
+      <p>Please enter your sales hires</p>
+      <button onClick={incCount}>+</button>
+      <button onClick={onSubmit}>I'm done!</button>
+    </div>
+  );
+};
 
 export default About;

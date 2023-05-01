@@ -20,6 +20,7 @@ const SheetEditor = () => {
 
   const setActiveSheet = (sheetName) => {
     serverFunctions.setActiveSheet(sheetName).then(setNames).catch(alert);
+    
   };
 
   // You can also use async/await notation for server calls with our server wrapper.
@@ -34,6 +35,11 @@ const SheetEditor = () => {
     }
   };
 
+  const test = () => {
+    console.log("test is clicked")
+    serverFunctions.setActiveSheetCell()
+  }
+
   return (
     <div>
       <p>
@@ -44,6 +50,7 @@ const SheetEditor = () => {
         for a new sheet, hit enter and the new sheet will be created. Click the
         red &times; next to the sheet name to delete it.
       </p>
+      <button onClick={() => test()}>test!</button>
       <FormInput submitNewSheet={submitNewSheet} />
       <TransitionGroup className="sheet-list">
         {names.length > 0 &&

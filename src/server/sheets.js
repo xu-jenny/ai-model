@@ -29,3 +29,23 @@ export const setActiveSheet = (sheetName) => {
   SpreadsheetApp.getActive().getSheetByName(sheetName).activate();
   return getSheetsData();
 };
+
+export const getActiveSheetCell = (cell) => {
+  return SpreadsheetApp.getActive().getRange(cell);
+};
+
+export const setActiveSheetCell = () => {
+  SpreadsheetApp.getActive().getSheetByName('another').activate();
+  SpreadsheetApp.getActive()
+    .getSheetByName('another')
+    .getRange('A2')
+    .setValue('Hello!');
+  const ss = SpreadsheetApp.getActive().getSheetByName('another');
+  ss.getRange('A1').setValue('Hello Worlds!');
+  return getSheetsData();
+};
+
+export function getSheetOwnerEmail() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  return sheet.getOwner().getEmail();
+}
