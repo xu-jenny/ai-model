@@ -7,7 +7,14 @@ import {
   openAboutSidebar,
 } from './ui';
 
-import { getSheetsData, addSheet, deleteSheet, setActiveSheet, getActiveSheet, setActiveSheetCell } from './sheets';
+import {
+  getSheetsData,
+  addSheet,
+  deleteSheet,
+  setActiveSheet,
+  setActiveSheetCell,
+  setCellContent,
+} from './sheets';
 
 // Public functions must be exported as named exports
 export {
@@ -21,6 +28,6 @@ export {
   addSheet,
   deleteSheet,
   setActiveSheet,
-  getActiveSheet,
-  setActiveSheetCell
+  setActiveSheetCell,
+  setCellContent,
 };

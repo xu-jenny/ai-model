@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { serverFunctions } from '../../utils/serverFunctions';
+import { setSalesHire } from './ServerPlayground';
 
 type MessengerType = 'user' | 'assistant';
 
@@ -42,7 +43,7 @@ const Spinner = () => (
   </div>
 );
 
-const About = () => {
+const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
@@ -63,47 +64,79 @@ const About = () => {
       console.log(JSON.stringify(data));
       setMessages([...messages, newMessage]);
       setInput('');
-    //   let response = await fetch('http://127.0.0.1:3000/chat', {
-    let response = await fetch('https://t5tdnlosfh.execute-api.us-east-1.amazonaws.com/Prod/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
+      //   let response = await fetch('http://127.0.0.1:3000/chat', {
+      let response = await fetch(
+        'https://t5tdnlosfh.execute-api.us-east-1.amazonaws.com/Prod/chat',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }
+      )
         .then((response) => response.json())
         .catch((error) => {
           console.error(error);
         });
       console.log(response);
-      if(response != null && 'message' in response){
-        const exists = messages.some((item) => item.role === newMessage.role && item.content === newMessage.content);
-        if(exists){
-            setMessages([...messages, {role: 'assistant', content: response['message']}]);
+      if (response != null && 'message' in response) {
+        const exists = messages.some(
+          (item) =>
+            item.role === newMessage.role && item.content === newMessage.content
+        );
+        if (exists) {
+          setMessages([
+            ...messages,
+            { role: 'assistant', content: response['message'] },
+          ]);
         } else {
-            setMessages([...messages, newMessage, {role: 'assistant', content: response['message']}]);
+          setMessages([
+            ...messages,
+            newMessage,
+            { role: 'assistant', content: response['message'] },
+          ]);
         }
       } else {
-        setMessages([...messages, newMessage, {role: 'assistant', content: "There was an error with the request, please try again later"}]);
+        setMessages([
+          ...messages,
+          newMessage,
+          {
+            role: 'assistant',
+            content:
+              'There was an error with the request, please try again later',
+          },
+        ]);
       }
       setLoading(false);
     }
+  };
 
-    // send message to backend
-    // render message
+  const setCell = async () => {
+    const response = await serverFunctions.setCellContent('B2', '04/2021');
+    console.log(response);
+  };
+
+  const setSales = async () => {
+    const response = await serverFunctions.setActiveSheetCell();
+    console.log(response);
   };
 
   return (
     <>
-      <h3>☀️ Welcome to Enu! ☀️</h3>
+      <h3 className="justify-center items-center text-center text-xl">
+        ☀️ Welcome to Enu! ☀️
+      </h3>
       <div className="flex-grow overflow-y-auto">
-        {messages.map((message) =>
-          <div className='mt-2'>message.role == 'assistant' ? (
-            <AIMessage content={message.content} />
-          ) : (
-            <HumanMessage content={message.content} />
-          )</div>
-        )}
+        {messages.map((message) => (
+          <div className="mt-2">
+            {message.role == 'assistant' ? (
+              <AIMessage content={message.content} />
+            ) : (
+              <HumanMessage content={message.content} />
+            )}
+          </div>
+        ))}
         {loading && <Spinner />}
       </div>
       <div className="bg-white p-4 flex-shrink-0">
@@ -111,7 +144,7 @@ const About = () => {
           <input
             type="text"
             value={input}
-            disabled={!loading}
+            disabled={loading == true}
             placeholder="Your message"
             onChange={(event) => setInput(event.target.value)}
             className="flex-grow rounded-lg border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -124,8 +157,19 @@ const About = () => {
           </button>
         </div>
       </div>
+      <button onClick={setCell}>set cell</button>
+      <button onClick={setSales}>set sales</button>
+      <div>
+        <button
+          onClick={() => setSalesHire([
+            ['90000', '4/21'],
+            ['92000', '5/21'],
+            ['94000', '6/21'],
+          ])}
+        >test sales</button>
+      </div>
     </>
   );
 };
 
-export default About;
+export default Chat;
