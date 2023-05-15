@@ -34,80 +34,9 @@ export const getActiveSheetCell = (cell) => {
   return SpreadsheetApp.getActive().getRange(cell);
 };
 
-function setSalesSheetMetaData(values) {
-  const cell_map = {
-    model_start_date: 'F12',
-    sales_success_discount: 'D9',
-    churn: 'E43',
-  };
-  Object.keys(values).forEach((key) => {
-    console.log(key)
-    console.log(cell_map[key])
-    console.log(values[key])
-    setCellContent(cell_map[key], values[key])
-  });
-}
-class Cell {
-  row: number;
-  col: number;
 
-  constructor(cell: string);
-  constructor(row: number, col: number);
-  constructor(arg1: string | number, arg2?: number) {
-    if (typeof arg1 === 'string') {
-      const [letters, numbers] = arg1.match(/^([a-zA-Z]+)(\d+)$/).slice(1);
-      this.col = this.getColumnNumber(letters);
-      this.row = parseInt(numbers);
-    } else {
-      this.row = arg1;
-      this.col = arg2!;
-    }
-  }
 
-  getColumnNumber(column) {
-    let result = 0;
-    for (let i = 0; i < column.length; i++) {
-      const charCode = column.charCodeAt(i) - 64; // A is 65 in ASCII, so subtract 64 to get 1 for A, 2 for B, etc.
-      result = result * 26 + charCode;
-    }
-    return result;
-  }
 
-  getColumnLetters() {
-    let letters = '';
-    while (this.col > 0) {
-      const modulo = (this.col - 1) % 26;
-      letters = String.fromCharCode(65 + modulo) + letters;
-      this.col = Math.floor((this.col - 1) / 26);
-    }
-    return letters;
-  }
-
-  rowOffSet(by: number) {
-    return this.row + by;
-  }
-
-  toString() {
-    return this.getColumnLetters() + this.row.toString();
-  }
-}
-
-function setSalesHire(table) {
-  const SalesQuotaCell = new Cell('A18');
-  const SalesHireCell = new Cell('E18');
-  table.forEach((tuple, i) => {
-    console.log(new Cell(SalesQuotaCell.rowOffSet(i), SalesQuotaCell.col).toString())
-    setCellContent(
-      new Cell(SalesQuotaCell.rowOffSet(i), SalesQuotaCell.col).toString(),
-      tuple[0]
-    );
-
-    setCellContent(
-      new Cell(SalesHireCell.rowOffSet(i), SalesHireCell.col).toString(),
-      tuple[1]
-    );
-  });
-}
 
 function setPricePerUser(values){
   const cell_map = {
@@ -158,18 +87,6 @@ export const setActiveSheetCell = () => {
   const ss = SpreadsheetApp.getActive().getSheetByName('another');
   ss.getRange('A1').setValue('Hanother one!');
   
-  SpreadsheetApp.getActive().getSheetByName('sales').activate();  
-  const sales_hire_table = [
-    ['90000', '4/21'],
-    ['92000', '5/21'],
-    ['94000', '6/21'],
-  ];
-  setSalesSheetMetaData({
-    model_start_date: '02/31/2021',
-    sales_success_discount: '0.75',
-    churn: '0.06',
-  });
-  setSalesHire(sales_hire_table);
 
   SpreadsheetApp.getActive().getSheetByName('user_growth').activate();  
   const price_per_user_table = {
@@ -212,3 +129,14 @@ export function setCellContent(cell: string, content: string) {
   SpreadsheetApp.getActive().getRange(cell).setValue(content);
   return getSheetsData();
 }
+
+ /**
+  * 
+  * @param ranges arg to sheet.getRange(), such as "A1, C3, B2"
+  */
+export function highlightCells(ranges: string[]) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  let rangeList = sheet.getRangeList(ranges);
+  sheet.setActiveRangeList(rangeList);
+}
+

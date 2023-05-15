@@ -16,6 +16,11 @@ import {
   setCellContent,
 } from './sheets';
 
+import {
+  setSalesSheetMetaData,
+  highlightSalesCells
+} from './sales';
+
 // Public functions must be exported as named exports
 export {
   onOpen,
@@ -29,5 +34,7 @@ export {
   deleteSheet,
   setActiveSheet,
   setActiveSheetCell,
+  setSalesSheetMetaData,
+  highlightSalesCells,
   setCellContent,
 };
