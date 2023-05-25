@@ -16,10 +16,11 @@ import {
   setCellContent,
 } from './sheets';
 
-import {
-  setSalesSheetMetaData,
-  highlightSalesCells
-} from './sales';
+import { setSalesSheetMetaData, highlightSalesCells } from './sales';
+
+import { setPricePerUser } from './price_per_user';
+
+import { setExpenses, setIncome } from './cashflow';
 
 // Public functions must be exported as named exports
 export {
@@ -37,4 +38,7 @@ export {
   setSalesSheetMetaData,
   highlightSalesCells,
   setCellContent,
+  setPricePerUser,
+  setExpenses,
+  setIncome,
 };
